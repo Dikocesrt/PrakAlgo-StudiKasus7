@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include "library/karyawan.h"
 #include "library/input.h"
 #include "library/proses.h"
 #include "library/output.h"
@@ -14,10 +15,9 @@ int main(){
     objectInput.toFile();
 
     objectProses.getData();
-    objectProses.hitung();
-    objectProses.toFile();
+    objectProses.sortingAscending();
+    objectProses.sortingDescending();
 
-    objectOutput.getData();
     objectOutput.cetak();
 
     return 0;

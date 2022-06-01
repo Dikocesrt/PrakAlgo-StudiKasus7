@@ -1,25 +1,22 @@
 using namespace std;
 
+class Karyawan;
+
 class Output{
     public:
-        void getData(){
-            ambil_data.open("apiData.txt");
+        void getData(string namaFile){
+            ambil_data.open(namaFile);
             ambil = 1;
             while(!ambil_data.eof()){
                 if(ambil == 1){
                     ambil_data >> jumlahKaryawan;
                 }else{
                     for(i=0;i<jumlahKaryawan;i++){
-                        ambil_data >> idKaryawan[i];
-                        ambil_data >> namaKaryawan[i];
-                        ambil_data >> jabatanKaryawan[i];
-                        ambil_data >> noTelepon[i];
-                    }
-                    for(i=0;i<jumlahKaryawan;i++){
-                        ambil_data >> idDescending[i];
-                    }
-                    for(i=0;i<jumlahKaryawan;i++){
-                        ambil_data >> idAscending[i];
+                        karyawan[i] = Karyawan();
+                        ambil_data >> karyawan[i].id;
+                        ambil_data >> karyawan[i].nama;
+                        ambil_data >> karyawan[i].jabatan;
+                        ambil_data >> karyawan[i].noTelepon;
                     }
                 }
                 ambil += 1;
@@ -27,21 +24,30 @@ class Output{
             ambil_data.close();
         }
 
+        void search(int idCari){
+            for(i=0;i<jumlahKaryawan;i++){
+                if(idCari == karyawan[i].id){
+                    cout << karyawan[i].id << "\t" << karyawan[i].nama << " " << karyawan[i].jabatan << " " << karyawan[i].noTelepon << endl;
+                    return;
+                }
+            }
+            cout << "-----------------------------" << endl;
+            cout << "id tidak ditemukan..." << endl;
+        }
+
         void cetak(){
-            cout << "Urutan id Ascending = ";
+            getData("karyawanAscending.txt");
+            cout << "Data Karyawan Ascending" << endl;
+            cout << "-----------------------------" << endl;
             for(i=0;i<jumlahKaryawan;i++){
-                cout << idAscending[i] << " ";
+                cout << karyawan[i].id << "\t" << karyawan[i].nama << " " << karyawan[i].jabatan << " " << karyawan[i].noTelepon << endl;
             }
-            cout << endl;
-            cout << "Urutan id Descending = ";
-            for(i=0;i<jumlahKaryawan;i++){
-                cout << idDescending[i] << " ";
-            }
-            cout << endl;
-            cout << "Data Karyawan" << endl;
             cout << "=============================================" << endl;
+            getData("karyawanDescending.txt");
+            cout << "Data Karyawan Descending" << endl;
+            cout << "-----------------------------" << endl;
             for(i=0;i<jumlahKaryawan;i++){
-                cout << idKaryawan[i] << "\t" << namaKaryawan[i] << " " << jabatanKaryawan[i] << " " << noTelepon[i] << endl;
+                cout << karyawan[i].id << "\t" << karyawan[i].nama << " " << karyawan[i].jabatan << " " << karyawan[i].noTelepon << endl;
             }
             cout << "=============================================" << endl;
             cout << "Apakah Anda Ingin Melakukan Pencarian?" << endl;
@@ -49,14 +55,28 @@ class Output{
             cout << "2. Tidak" << endl;
             cout << "Masukkan Pilihan : ";
             cin >> pil;
+            cout << "-----------------------------" << endl;
             if(pil == 1){
-                cout << "Masukkan Id Yang Ingin Dicari : ";
-                cin >> cari;
+                while(true){
+                    cout << "Masukkan id Yang Ingin Dicari : ";
+                    cin >> cari;
+                    search(cari);
+                    cout << "Apakah Anda Ingin Melakukan Pencarian Lagi?" << endl;
+                    cout << "1. Ya" << endl;
+                    cout << "2. Tidak" << endl;
+                    cout << "Masukkan Pilihan : ";
+                    cin >> pil;
+                    cout << "-----------------------------" << endl;
+                    if(pil == 2){
+                        break;
+                    }
+                }
             }
         }
 
     private:
         ifstream ambil_data;
         string namaKaryawan[100], jabatanKaryawan[100], noTelepon[100];
+        Karyawan karyawan[100];
         int pil, jumlahKaryawan, i, ambil, idKaryawan[100], idAscending[100], idDescending[100], cari;
 };
